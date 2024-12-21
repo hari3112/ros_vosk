@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="camera_enable" default="false"/>
+    <arg name="lidar_enable" default="false"/>
+    <param name="robot_description" command="xacro '$(find mobile_robot)/urdf/rov.urdf.xacro'"/>
+    <arg name="rviz_config_file" default="$(find mobile_robot)/config/robot.rviz"/>
+    <!--<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />-->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config_file)"/> 
+    <group if="$(arg camera_enable)">
+        <node name="camera_check" pkg="mobile_robot" type="camera_plugin_gazebo.py" output="screen"/>
+    </group>
+    
+    <group if="$(arg lidar_enable)">
+        <node name="lidar_sensor" pkg="mobile_robot" type="lidar_sensor.py" output="screen"/>
+    </group>
+</launch>
